@@ -1,0 +1,413 @@
+ /* Flashcard App - Modern Colorful UI */
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+ :root {
+   --primary: #2563eb;
+   --primary-dark: #1e3a8a;
+   --accent: #f59e0b;
+   --danger: #dc2626;
+   --success: #10b981;
+
+   --bg-light: #f9fafb;
+   --bg-card: #ffffff;
+   --bg-folder: #f1f5f9;
+
+   --text-main: #111827;
+   --text-secondary: #4b5563;
+   --text-muted: #9ca3af;
+
+   --radius: 12px;
+   --shadow: 0 4px 8px rgba(0,0,0,0.1);
+ }
+
+ body {
+   font-family: 'Inter', sans-serif;
+   background: linear-gradient(to bottom right, #e0f2fe, #fef9c3);
+   margin: 0;
+   color: var(--text-main);
+   line-height: 1.6;
+ }
+
+ header {
+   background: linear-gradient(to right, var(--primary), var(--primary-dark));
+   color: white;
+   padding: 2rem 1rem;
+   text-align: center;
+   box-shadow: var(--shadow);
+ }
+
+ header h1 {
+   font-size: 2.5rem;
+   margin: 0;
+ }
+
+ .input-section {
+   background: var(--bg-card);
+   padding: 2rem;
+   margin: 2rem auto;
+   max-width: 900px;
+   border-radius: var(--radius);
+   box-shadow: var(--shadow);
+   display: flex;
+   flex-wrap: wrap;
+   gap: 1rem;
+   justify-content: center;
+ }
+
+ .input-section input,
+ .input-section textarea {
+   font-size: 1rem;
+   padding: 0.75rem 1rem;
+   border: 1px solid var(--text-muted);
+   border-radius: var(--radius);
+   width: 100%;
+   max-width: 400px;
+ }
+
+ .input-section button {
+   background: var(--primary);
+   color: white;
+   padding: 0.75rem 1.5rem;
+   border: none;
+   border-radius: var(--radius);
+   cursor: pointer;
+   font-weight: 600;
+   transition: all 0.2s ease;
+ }
+
+ .input-section button:hover {
+   background: var(--primary-dark);
+ }
+
+ #foldersContainer {
+   padding: 2rem;
+   max-width: 1200px;
+   margin: 0 auto;
+ }
+
+ .folder {
+   background: var(--bg-folder);
+   border-radius: var(--radius);
+   box-shadow: var(--shadow);
+   margin-bottom: 2rem;
+   overflow: hidden;
+   border: 1px solid #e5e7eb;
+ }
+
+ .folder-header {
+   background: var(--bg-card);
+   padding: 1rem 1.5rem;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   border-bottom: 1px solid #e5e7eb;
+   cursor: pointer;
+ }
+
+ .folder-header h3 {
+   margin: 0;
+   font-size: 1.2rem;
+   flex-grow: 1;
+ }
+
+ .folder-header .actions {
+   display: flex;
+   gap: 0.5rem;
+   margin-right: 1rem;
+   align-items: center;
+ }
+
+ .folder-header .actions button {
+   background: none;
+   border: none;
+   font-size: 1.2rem;
+   cursor: pointer;
+   color: var(--text-muted);
+   transition: color 0.2s ease;
+   padding: 0.25rem;
+   border-radius: 4px;
+ }
+
+ .folder-header .actions button:hover {
+   color: var(--primary);
+   background: #f3f4f6;
+ }
+
+ .filter-toggle {
+   background: none;
+   border: 1px solid var(--text-muted);
+   color: var(--text-secondary);
+   font-size: 0.85rem;
+   padding: 0.3rem 0.6rem;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: all 0.2s ease;
+ }
+
+ .filter-toggle:hover {
+   border-color: var(--primary);
+   color: var(--primary);
+ }
+
+ .filter-toggle.active {
+   background: var(--primary);
+   color: white;
+   border-color: var(--primary);
+ }
+
+ .folder-header .toggle-icon {
+   font-weight: 800;
+   font-size: 1.5rem;
+   cursor: pointer;
+   color: var(--text-secondary);
+   transition: transform 0.2s ease;
+ }
+
+ .folder-content {
+   display: none;
+   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+   gap: 1.5rem;
+   padding: 1.5rem;
+   background: var(--bg-light);
+ }
+
+ .folder-content.active {
+   display: grid;
+ }
+
+ .flashcard {
+   perspective: 1000px;
+   height: 260px;
+   position: relative;
+ }
+
+ .card-inner {
+   width: 100%;
+   height: 100%;
+   position: relative;
+   transform-style: preserve-3d;
+   transition: transform 0.6s ease;
+ }
+
+ .flashcard.flipped .card-inner {
+   transform: rotateY(180deg);
+ }
+
+ .card-front, .card-back {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   border-radius: var(--radius);
+   backface-visibility: hidden;
+   box-shadow: var(--shadow);
+   padding: 1rem;
+   overflow: auto;
+   border: 1px solid #e5e7eb;
+   display: flex;
+   flex-direction: column;
+ }
+
+ .card-front {
+   background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+ }
+
+ .card-back {
+   background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+   transform: rotateY(180deg);
+ }
+
+ .card-front h3, .card-back h3 {
+   margin: 0 0 0.5rem 0;
+   font-size: 1.1rem;
+   flex-shrink: 0;
+ }
+
+ .card-back p {
+   margin: 0;
+   flex-grow: 1;
+ }
+
+ .card-controls {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   display: flex;
+   gap: 0.5rem;
+   z-index: 10;
+ }
+
+ .card-controls button {
+   background: white;
+   border: 1px solid var(--text-muted);
+   padding: 0.4rem 0.6rem;
+   border-radius: 6px;
+   cursor: pointer;
+   font-size: 0.9rem;
+   transition: 0.2s;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-width: 28px;
+   height: 28px;
+ }
+
+ .card-controls button:hover {
+   background: var(--accent);
+   color: white;
+   border-color: var(--accent);
+ }
+
+ .card-star {
+   position: absolute;
+   bottom: 10px;
+   right: 10px;
+   font-size: 1.5rem;
+   color: #fbbf24;
+   cursor: pointer;
+   transition: transform 0.2s ease;
+   z-index: 10;
+   user-select: none;
+ }
+
+ .card-star.inactive {
+   color: #d1d5db;
+ }
+
+ .card-star:hover {
+   transform: scale(1.2);
+ }
+
+ .flip-btn {
+   position: absolute;
+   bottom: 10px;
+   left: 10px;
+   background: rgba(255, 255, 255, 0.9);
+   border: 1px solid var(--text-muted);
+   padding: 0.4rem 0.8rem;
+   border-radius: 6px;
+   cursor: pointer;
+   font-size: 0.85rem;
+   transition: 0.2s;
+ }
+
+ .flip-btn:hover {
+   background: var(--primary);
+   color: white;
+   border-color: var(--primary);
+ }
+
+ .edit-panel {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.5);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+   padding: 2rem;
+ }
+
+ .edit-modal {
+   background: white;
+   border-radius: var(--radius);
+   padding: 2rem;
+   max-width: 600px;
+   width: 100%;
+   max-height: 80vh;
+   overflow-y: auto;
+   box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+ }
+
+ .edit-modal h3 {
+   margin: 0 0 1.5rem 0;
+   color: var(--text-main);
+ }
+
+ .edit-modal .form-group {
+   margin-bottom: 1.5rem;
+ }
+
+ .edit-modal label {
+   display: block;
+   margin-bottom: 0.5rem;
+   font-weight: 600;
+   color: var(--text-secondary);
+ }
+
+ .edit-modal textarea {
+   width: 100%;
+   min-height: 120px;
+   font-size: 1rem;
+   padding: 0.75rem;
+   border: 2px solid #e5e7eb;
+   border-radius: var(--radius);
+   resize: vertical;
+   font-family: inherit;
+   line-height: 1.5;
+   box-sizing: border-box;
+ }
+
+ .edit-modal textarea:focus {
+   outline: none;
+   border-color: var(--primary);
+ }
+
+ .edit-modal .edit-actions {
+   display: flex;
+   gap: 1rem;
+   justify-content: flex-end;
+   margin-top: 2rem;
+ }
+
+ .edit-modal .edit-actions button {
+   padding: 0.75rem 1.5rem;
+   border: none;
+   border-radius: var(--radius);
+   cursor: pointer;
+   font-weight: 600;
+   transition: all 0.2s ease;
+ }
+
+ .edit-modal .btn-cancel {
+   background: #f3f4f6;
+   color: var(--text-secondary);
+ }
+
+ .edit-modal .btn-cancel:hover {
+   background: #e5e7eb;
+ }
+
+ .edit-modal .btn-save {
+   background: var(--primary);
+   color: white;
+ }
+
+ .edit-modal .btn-save:hover {
+   background: var(--primary-dark);
+ }
+
+ @media (max-width: 768px) {
+   .folder-content {
+     grid-template-columns: 1fr;
+   }
+
+   .flashcard {
+     height: 220px;
+   }
+
+   .input-section input,
+   .input-section textarea {
+     max-width: 100%;
+   }
+
+   .edit-panel {
+     padding: 1rem;
+   }
+
+   .edit-modal {
+     padding: 1.5rem;
+   }
+ }
